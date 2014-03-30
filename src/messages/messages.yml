@@ -11,6 +11,8 @@ Messages:
   stat_firstJoin: "&6First join:&c "
   stat_lastJoin: "&6Last seen:&c "
   stat_aloneTime: "&6Time spent alone:&c "
+  stat_isOnline: "&a%player% &6is &2online &6since %time%."
+  stat_isOffline: "&a%player% &6is &4offline &6since %time%."
   record_mostOnline: "&a%player% &6has spent more time on the server than anyone else!"
   record_mostSessions: "&a%player% &6has logged in more often than anyone else!"
   record_foreverAlone: "&a%player% &6has spent more time alone on the server than anyone else!"

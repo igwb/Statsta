@@ -1,6 +1,7 @@
 package me.igwb.Statsta.commands;
 
 import me.igwb.Statsta.DatabaseConnector;
+import me.igwb.Statsta.PlayerDataPair;
 import me.igwb.Statsta.Statsta;
 import me.igwb.Statsta.messages.Messages;
 
@@ -66,5 +67,14 @@ public final class CmdInfo {
         sender.sendMessage(msg.getMsg("stat_playTime") + Statsta.timeToString(playTime));
         sender.sendMessage(msg.getMsg("stat_aloneTime") + Statsta.timeToString(aloneTime) + " (" + alonePercent + "%)");
         sender.sendMessage(msg.getMsg("stat_loginCount") + db.getSessionCount(name));
+
+        Integer currentSession = db.getCurrentSessionDuration(name);
+        if (currentSession != null) {
+            sender.sendMessage(msg.getMsg("stat_isOnline").replace("%player%", name).replace("%time%", Statsta.timeToString(currentSession / 1000)));
+        } else {
+            PlayerDataPair offlineSince = db.getOfflineSince(name);
+
+            sender.sendMessage(msg.getMsg("stat_isOffline").replace("%player%", offlineSince.data1).replace("%time%", Statsta.timeToString(Integer.valueOf(offlineSince.data2) / 1000, true)));
+        }
     }
 }

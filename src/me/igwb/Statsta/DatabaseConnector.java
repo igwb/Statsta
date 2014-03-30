@@ -683,6 +683,91 @@ public class DatabaseConnector {
         }
     }
 
+    public Integer getCurrentSessionDuration(String name) {
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            con = getConnection();
+            pst = con.prepareStatement("SELECT Id, Start, End FROM Sessions WHERE Player=? AND End IS NULL ORDER BY Id DESC LIMIT 1;");
+            pst.setString(1, name);
+
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+
+                return Integer.valueOf(String.valueOf(System.currentTimeMillis() - getTimeFromString(rs.getString("Start"))));
+            } else {
+
+                return null;
+            }
+
+        } catch (SQLException e) {
+            parentPlugin.logSevere(e.getMessage());
+            return 0;
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                parentPlugin.logSevere(e.getMessage());
+            }
+        }
+    }
+
+    public PlayerDataPair getOfflineSince(String name) {
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+
+            if (getCurrentSessionDuration(name) != null) {
+                return null;
+            }
+
+            con = getConnection();
+            pst = con.prepareStatement("SELECT Id, End, Player FROM Sessions WHERE Player=? ORDER BY Id DESC LIMIT 1;");
+            pst.setString(1, name);
+
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+
+                return new PlayerDataPair(rs.getString("Player"), String.valueOf(System.currentTimeMillis() - getTimeFromString(rs.getString("End"))));
+            } else {
+
+                return null;
+            }
+
+        } catch (SQLException e) {
+            parentPlugin.logSevere(e.getMessage());
+            return null;
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                parentPlugin.logSevere(e.getMessage());
+            }
+        }
+    }
+
     public String getMostLogins() {
         Connection con = null;
         PreparedStatement pst = null;
