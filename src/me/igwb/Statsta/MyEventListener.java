@@ -10,16 +10,25 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class MyEventListener implements Listener {
 
-    private Messages msg;
 
-    public MyEventListener(final Statsta parent) {
-        msg = ((Statsta) Bukkit.getServer().getPluginManager().getPlugin("Statsta")).getMessages();
+    /**
+     * Create an instance of the EventListener.
+     */
+    public MyEventListener() {
     }
 
+    /**
+     * Called by bukkit.
+     * @param e The event.
+     */
     @EventHandler
     public void onPlayerJoinEvent(final PlayerJoinEvent e) {
 
-        DatabaseConnector db = ((Statsta) Bukkit.getServer().getPluginManager().getPlugin("Statsta")).getDbConnector();
+        //We need a database connection first.
+        DatabaseConnector db = Statsta.getDb();
+
+        //Also we need the messages.
+        Messages msg = Statsta.getMsg();
 
         db.startSession(e.getPlayer());
 
@@ -36,9 +45,13 @@ public class MyEventListener implements Listener {
         }
     }
 
+    /**
+     * Called by bukkit.
+     * @param e The event.
+     */
     @EventHandler
     public void onPlayerQuitEvent(final PlayerQuitEvent e) {
 
-        ((Statsta) Bukkit.getServer().getPluginManager().getPlugin("Statsta")).getDbConnector().endSession(e.getPlayer());
+        Statsta.getDb().endSession(e.getPlayer());
     }
 }
