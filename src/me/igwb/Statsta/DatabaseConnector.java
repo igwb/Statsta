@@ -155,7 +155,7 @@ public class DatabaseConnector {
             Player[] players = Bukkit.getServer().getOnlinePlayers();
 
             for (Player p : players) {
-                if(p.getName() != player.getName()) {
+                if (p.getName() != player.getName()) {
                     pst = con.prepareStatement("INSERT INTO Encounters(Player, OtherPlayer, Start) Values(?,?,?)");
 
                     pst.setString(1, player.getName());
@@ -168,19 +168,19 @@ public class DatabaseConnector {
 
             /* If there is only one player now, create an entry in the encounters table with OtherPlayer set to null.
              * This is used to determine that the player is playing alone.
-             * 
+             *
              * If there is more than one player, finish the entry in the encounter table where OtherPlayer is null.
              */
-            
+
             Bukkit.getServer().getLogger().log(Level.INFO, "Online:" + players.length);
-            if(players.length == 1) {
+            if (players.length == 1) {
                 Bukkit.getServer().getLogger().log(Level.INFO, "Begun an alone session!");
                 pst = con.prepareStatement("INSERT INTO Encounters(Player, Start) Values(?,?)");
                 pst.setString(1, players[0].getName());
-                pst.setString(2, currentTime); 
+                pst.setString(2, currentTime);
                 pst.executeUpdate();
             } else {
-                
+
                 /*
                  * Close all encounters.
                  * Find all Encounters in the database where OtherPlayer is null.
@@ -192,8 +192,8 @@ public class DatabaseConnector {
                 /*
                  * Iterate thru the result set and update the end time and duration.
                  */
-                
-                while(rs.next()) {
+
+                while (rs.next()) {
                     Bukkit.getServer().getLogger().log(Level.INFO, "Ended an alone session!");
                     secondPst = con.prepareStatement("UPDATE Encounters SET End=?, Duration=? WHERE Id=?");
                     secondPst.setString(1, currentTime);
@@ -203,7 +203,7 @@ public class DatabaseConnector {
                     secondPst.close();
                 }
             }
-            
+
             return DBAddResult.success;
 
 
@@ -253,9 +253,9 @@ public class DatabaseConnector {
              * Store the id in the sId variable-
              * Store the start time in the start variable.
              */
-            
+
             Integer sId;
-            
+
             pst = con.prepareStatement("SELECT Id, Start FROM Sessions WHERE Player=\"" + player.getName() + "\" ORDER BY Id DESC LIMIT 1;");
             rs = pst.executeQuery();
 
@@ -269,7 +269,7 @@ public class DatabaseConnector {
             /*
              * Update the end time and the duration of the found session.
              */
-            
+
             pst = con.prepareStatement("UPDATE Sessions SET End=?, Duration=? WHERE Id=?");
             pst.setString(1, getTimeFromLong(end));
             pst.setInt(2, Integer.valueOf((int) (end - start)));
@@ -278,7 +278,7 @@ public class DatabaseConnector {
 
             pst.close();
             rs.close();
-            
+
             /*
              * Close all encounters.
              * Find all Encounters in the database that include the player that quit where the end time is null.
@@ -292,8 +292,8 @@ public class DatabaseConnector {
             /*
              * Iterate thru the result set and update the end time and duration.
              */
-            
-            while(rs.next()) {
+
+            while (rs.next()) {
                 Bukkit.getServer().getLogger().log(Level.INFO, "Ended a session");
                 secondPst = con.prepareStatement("UPDATE Encounters SET End=?, Duration=? WHERE Id=?");
                 secondPst.setString(1, getTimeFromLong(end));
@@ -301,39 +301,39 @@ public class DatabaseConnector {
                 secondPst.setString(3, rs.getString("Id"));
                 secondPst.executeUpdate();
             }
-            
+
             pst.close();
             rs.close();
-            
+
             /*
              * Check how many players are online.
              * If there is only one, make an entry in the Encounters table with OtherPlayer set to null.
              * This is used to track the time a player is spending alone on the server.
              */
-            
+
             Player[] players = Bukkit.getServer().getOnlinePlayers();
-            
+
             Integer playerCount = 0;
 
-            
+
             for (Player p : players) {
-                if(p.getName() != player.getName()) {
-                    playerCount ++;
+                if (p.getName() != player.getName()) {
+                    playerCount++;
                 }
-                if(playerCount > 1) {
+                if (playerCount > 1) {
                     break;
                 }
             }
-            
-            if(playerCount == 1) {
+
+            if (playerCount == 1) {
                 Bukkit.getServer().getLogger().log(Level.INFO, "Begun an alone session!");
-                
+
                 pst = con.prepareStatement("INSERT INTO Encounters(Player, Start) Values(?,?)");
                 pst.setString(1, players[0].getName());
                 pst.setString(2, getTimeFromLong(end)); //end is the time when the session of the player that just quit ended. aka now
                 pst.executeUpdate();
             }
-            
+
             return DBAddResult.success;
 
 
@@ -479,7 +479,7 @@ public class DatabaseConnector {
             }
         }
     }
-    
+
     public String getLongestPlayTime() {
         Connection con = null;
         PreparedStatement pst = null;
@@ -519,7 +519,7 @@ public class DatabaseConnector {
             }
         }
     }
- 
+
     public String getLongestAloneTime() {
         Connection con = null;
         PreparedStatement pst = null;
@@ -573,12 +573,12 @@ public class DatabaseConnector {
 
             Integer i = 0;
             HashMap<Integer, PlayerDataPair> result = new HashMap<Integer, PlayerDataPair>();
-            while(rs.next()) {
+            while (rs.next()) {
                 i++;
-                
+
                 result.put(i, new PlayerDataPair(rs.getString("Player"), String.valueOf(rs.getInt("SUM(Duration)"))));
             }
-            
+
             return result;
 
         } catch (SQLException e) {
@@ -614,12 +614,12 @@ public class DatabaseConnector {
 
             Integer i = 0;
             HashMap<Integer, PlayerDataPair> result = new HashMap<Integer, PlayerDataPair>();
-            while(rs.next()) {
+            while (rs.next()) {
                 i++;
-                
+
                 result.put(i, new PlayerDataPair(rs.getString("Player"), String.valueOf(rs.getInt("SUM(Duration)"))));
             }
-            
+
             return result;
 
         } catch (SQLException e) {
@@ -655,12 +655,12 @@ public class DatabaseConnector {
 
             Integer i = 0;
             HashMap<Integer, PlayerDataPair> result = new HashMap<Integer, PlayerDataPair>();
-            while(rs.next()) {
+            while (rs.next()) {
                 i++;
-                
+
                 result.put(i, new PlayerDataPair(rs.getString("Player"), String.valueOf(rs.getInt("COUNT(*)"))));
             }
-            
+
             return result;
 
         } catch (SQLException e) {
@@ -682,7 +682,7 @@ public class DatabaseConnector {
             }
         }
     }
-    
+
     public String getMostLogins() {
         Connection con = null;
         PreparedStatement pst = null;
@@ -720,7 +720,7 @@ public class DatabaseConnector {
             } catch (SQLException e) {
                 parentPlugin.logSevere(e.getMessage());
             }
-        }  
+        }
     }
 
     public String getTimeFromLong(long time) {
@@ -778,7 +778,7 @@ public class DatabaseConnector {
             }
         }
     }
-    
+
     public long getTimeFromString(String dateString) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");

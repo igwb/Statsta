@@ -20,22 +20,22 @@ public class MyEventListener implements Listener {
     public void onPlayerJoinEvent(final PlayerJoinEvent e) {
 
         DatabaseConnector db = ((Statsta) Bukkit.getServer().getPluginManager().getPlugin("Statsta")).getDbConnector();
-        
+
         db.startSession(e.getPlayer());
-        
-        if(e.getPlayer().getName().equalsIgnoreCase(db.getLongestPlayTime())) {
+
+        if (e.getPlayer().getName().equalsIgnoreCase(db.getLongestPlayTime())) {
             Bukkit.getServer().broadcastMessage(msg.getMsg("record_mostOnline").replace("%player%", e.getPlayer().getName()));
         }
-        
-        if(e.getPlayer().getName().equalsIgnoreCase(db.getLongestAloneTime())) {
+
+        if (e.getPlayer().getName().equalsIgnoreCase(db.getLongestAloneTime())) {
             Bukkit.getServer().broadcastMessage(msg.getMsg("record_foreverAlone").replace("%player%", e.getPlayer().getName()));
         }
-        
-        if(e.getPlayer().getName().equalsIgnoreCase(db.getMostLogins())) {
+
+        if (e.getPlayer().getName().equalsIgnoreCase(db.getMostLogins())) {
             Bukkit.getServer().broadcastMessage(msg.getMsg("record_mostSessions").replace("%player%", e.getPlayer().getName()));
         }
     }
-    
+
     @EventHandler
     public void onPlayerQuitEvent(final PlayerQuitEvent e) {
 

@@ -57,13 +57,13 @@ public class CommandListener implements CommandExecutor {
 
         String name;
 
-        if(args.length >= 2) {
+        if (args.length >= 2) {
             name = args[1];
         } else {
             name = sender.getName();
         }
 
-        if(db.getFirstJoin(name) == null) {
+        if (db.getFirstJoin(name) == null) {
             sender.sendMessage(msg.getMsg("unknown_player").replace("%player%", name));
             return;
         }
@@ -72,7 +72,7 @@ public class CommandListener implements CommandExecutor {
         Integer aloneTime = Math.round(db.getAloneTime(name) / 1000);
 
         String alonePercent;
-        if(aloneTime > 0) {
+        if (aloneTime > 0) {
             alonePercent = String.valueOf((aloneTime.floatValue() / playTime.floatValue()) * 100);
             alonePercent = alonePercent.substring(0, Math.min(alonePercent.length(), 4));
         } else {
@@ -86,8 +86,8 @@ public class CommandListener implements CommandExecutor {
     }
 
     private void cmd_top(CommandSender sender, String[] args) {
-      
-        if(args.length < 2) {
+
+        if (args.length < 2) {
             sender.sendMessage(msg.getMsg("cmd_top_usage"));
             return;
         }
@@ -115,7 +115,7 @@ public class CommandListener implements CommandExecutor {
 
 
         Integer page = 1;
-        if(args.length > 2) {
+        if (args.length > 2) {
             page = Integer.parseInt(args[2]);
         }
 
@@ -123,9 +123,9 @@ public class CommandListener implements CommandExecutor {
 
         Integer rank = ((page - 1) * PAGESIZE) + 1;
 
-        while(rank < stats.keySet().size() && rank <  ((page - 1) * PAGESIZE) + PAGESIZE + 1) {
+        while (rank < stats.keySet().size() && rank <  ((page - 1) * PAGESIZE) + PAGESIZE + 1) {
             sender.sendMessage(ChatColor.GOLD + String.format("%02d", rank) + "| " + stats.get(rank).data1 + " " + timeToString(Integer.parseInt(stats.get(rank).data2) / 1000));
-            rank ++;
+            rank++;
         }
     }
 
@@ -137,7 +137,7 @@ public class CommandListener implements CommandExecutor {
 
 
         Integer page = 1;
-        if(args.length > 2) {
+        if (args.length > 2) {
             page = Integer.parseInt(args[2]);
         }
 
@@ -145,19 +145,19 @@ public class CommandListener implements CommandExecutor {
 
         Integer rank = ((page - 1) * PAGESIZE) + 1;
 
-        while(rank < stats.keySet().size() && rank <  ((page - 1) * PAGESIZE) + PAGESIZE + 1) {
+        while (rank < stats.keySet().size() && rank <  ((page - 1) * PAGESIZE) + PAGESIZE + 1) {
             sender.sendMessage(ChatColor.GOLD + String.format("%02d", rank) + "| " + stats.get(rank).data1 + " " + timeToString(Integer.parseInt(stats.get(rank).data2) / 1000));
-            rank ++;
+            rank++;
         }
     }
-    
+
     private void cmd_top_login(CommandSender sender, String[] args) {
         DatabaseConnector db = ((Statsta) Bukkit.getServer().getPluginManager().getPlugin("Statsta")).getDbConnector();
 
         HashMap<Integer, PlayerDataPair> stats = db.getTopLoginCount();
-        
+
         Integer page = 1;
-        if(args.length > 2) {
+        if (args.length > 2) {
             page = Integer.parseInt(args[2]);
         }
 
@@ -165,14 +165,14 @@ public class CommandListener implements CommandExecutor {
 
         Integer rank = ((page - 1) * PAGESIZE) + 1;
 
-        while(rank < stats.keySet().size() && rank <  ((page - 1) * PAGESIZE) + PAGESIZE + 1) {
+        while (rank < stats.keySet().size() && rank <  ((page - 1) * PAGESIZE) + PAGESIZE + 1) {
             sender.sendMessage(ChatColor.GOLD + String.format("%02d", rank) + "| " + stats.get(rank).data1 + " " + stats.get(rank).data2);
-            rank ++;
+            rank++;
         }
     }
-    
+
     public String timeToString(int time) {
 
-        return (int)(time / 60 / 60) + "h " + (int)((time / 60) % 60) + "m " + (int)(time % 60) + "s";
+        return (int) (time / 60 / 60) + "h " + (int) ((time / 60) % 60) + "m " + (int) (time % 60) + "s";
     }
 }

@@ -30,15 +30,15 @@ public class Messages {
 
         Map<String, Object> temp;
         String strKey;
-        
-      //  Bukkit.getServer().getLogger().log(Level.INFO, "test: " + getMsgConfig().getCurrentPath());
-        
+
+        //  Bukkit.getServer().getLogger().log(Level.INFO, "test: " + getMsgConfig().getCurrentPath());
+
         temp = getMsgConfig().getConfigurationSection("Messages").getValues(false);
 
         Bukkit.getServer().getLogger().log(Level.INFO, "Messages:");
         for (Object obj : temp.keySet()) {
             strKey = obj.toString();
-            
+
             msg.put(strKey.toString(), temp.get(strKey).toString().replace("&", "§"));
             Bukkit.getServer().getLogger().log(Level.INFO, strKey + " : " + msg.get(strKey));
         }
@@ -64,8 +64,8 @@ public class Messages {
         if (msgConfig == null) {
             reloadMsgConfig();
         }
-        
-       // Bukkit.getServer().getLogger().log(Level.INFO, "get: " + (msgConfig == null));
+
+        // Bukkit.getServer().getLogger().log(Level.INFO, "get: " + (msgConfig == null));
         return msgConfig;
     }
 
@@ -96,9 +96,9 @@ public class Messages {
         }
 
         msgConfig = YamlConfiguration.loadConfiguration(msgConfigFile);
-        
+
         //Bukkit.getServer().getLogger().log(Level.INFO, "reload: " + (msgConfig == null));
-        
+
         // Look for defaults in the jar
         InputStream defConfigStream = pl.getResource("\\messages\\messages.yml");
 
