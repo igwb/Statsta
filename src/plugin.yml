@@ -1,0 +1,14 @@
+name: Statsta
+main: me.igwb.Statsta.Statsta
+version: 1.0
+commands:
+   statsta:
+      description: Display statistics.
+      usage: /statsta
+      permission: Statsta.use
+      permission-message: You don't have permission to use that command!
+   stats:
+      description: Display statistics.
+      usage: /stats
+      permission: Statsta.use
+      permission-message: You don't have permission to use that command!
