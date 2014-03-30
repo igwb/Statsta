@@ -690,7 +690,7 @@ public class DatabaseConnector {
 
         try {
             con = getConnection();
-            pst = con.prepareStatement("SELECT Id, Start, End FROM Sessions WHERE Player=? AND End IS NULL ORDER BY Id DESC LIMIT 1;");
+            pst = con.prepareStatement("SELECT Id, Start, End FROM Sessions WHERE Player=? COLLATE NOCASE AND End IS NULL ORDER BY Id DESC LIMIT 1;");
             pst.setString(1, name);
 
             rs = pst.executeQuery();
@@ -735,7 +735,7 @@ public class DatabaseConnector {
             }
 
             con = getConnection();
-            pst = con.prepareStatement("SELECT Id, End, Player FROM Sessions WHERE Player=? ORDER BY Id DESC LIMIT 1;");
+            pst = con.prepareStatement("SELECT Id, End, Player FROM Sessions WHERE Player=? COLLATE NOCASE ORDER BY Id DESC LIMIT 1;");
             pst.setString(1, name);
 
             rs = pst.executeQuery();
